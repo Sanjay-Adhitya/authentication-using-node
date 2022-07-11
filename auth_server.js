@@ -53,6 +53,7 @@ app.post('/api/register', async (req, res) => {
                 result = await User.create({
                     username, password
                 })
+                console.log("Register worked fine")
                 result = { status: "ok" }
             }
 
@@ -85,22 +86,8 @@ app.post('/api/login', async (req, res) => {
             },
             JWT_SECRET
         )
-        // const options = {
-        //     uri: `http://localhost:7071/api/api/`,
-        //     json: true,
-        //     resolveWithFullResponse: true,
-        //     method: 'GET'
-        // }
-        // const fromservice = await request(options).then((response) => {
-
-        //     return response.body
-    
-        // }).catch((err) => {
-        //     console.log(err);
-        //     console.log('errorstatuscode:' + err.statusCode)
-        // })
         const fromservice = null
-
+        console.log("Login worked fine")
         res.json({ satus: 'ok', data: token ,service: fromservice})
     }
     else {
@@ -119,13 +106,16 @@ app.post('/api/passchange', async (req, res) => {
         // gives username and _id from token
         var result = null
         if (typeof plaintext !== 'string' || !plaintext || plaintext.length == 0) {
+            console.log('password is not string or empty')
             result = { error: 'new password invalid' }
         }
         if (plaintext.length < 6) {
+            console.log('password too small')
             result = { error: 'password name must be more then or equal to 6 letters.' }
         }
         else {
             try {
+                console.log('password getting verified')
                 const user = await jwt.verify(token, JWT_SECRET)
                 const _id = await user.id
                 const hashedpassword = await bcrypt.hash(plaintext, 5)
@@ -135,13 +125,16 @@ app.post('/api/passchange', async (req, res) => {
                         $set: { password: hashedpassword }
                     }
                 )
+                console.log('password updated')
                 result = { status: 'ok', data: 'the new password' }
             } catch (error) {
+                console.log('some error -1')
                 result = { status: 'error', data: error }
             }
         }    
         res.json({"result":result})
     } catch (error) {
+        console.log('some error -2')
         res.status(400).json({ status: 'error', data: error })
     }    
 })
@@ -152,3 +145,19 @@ app.post('/api/passchange', async (req, res) => {
 
 
 
+
+
+        // const options = {
+        //     uri: `http://localhost:7071/api/api/`,
+        //     json: true,
+        //     resolveWithFullResponse: true,
+        //     method: 'GET'
+        // }
+        // const fromservice = await request(options).then((response) => {
+
+        //     return response.body
+    
+        // }).catch((err) => {
+        //     console.log(err);
+        //     console.log('errorstatuscode:' + err.statusCode)
+        // })
