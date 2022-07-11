@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_CRED, {
 })
 
 app.listen(port, async () => {
-    console.log('http://localhost:9999')
+    console.log('current PORT:'+port)
 })
 
 app.get('/',async (req,res) =>{
