@@ -38,6 +38,7 @@ app.post('/api/register', async (req, res) => {
     // algorithm should not be very fast to prevent boot force
     var result = null
     var { username, password } = req.body
+    var { age , nationality, gender} =  req.body
     try {
         if (typeof username !== 'string' || !username) {
             result = { error: 'user invalid' }
@@ -51,7 +52,7 @@ app.post('/api/register', async (req, res) => {
             } else {
                 password = await bcrypt.hash(password, 5)
                 result = await User.create({
-                    username, password
+                    username, password,age,nationality,gender
                 })
                 console.log("Register worked fine")
                 result = { status: "ok" }
